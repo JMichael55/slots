@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine Leaderboard</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .leaderboard-item:hover {
+            transform: scale(1.02);
+        }
+
+        .rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ff88;
+            width: 50px;
+        }
+
+        .username {
+            flex-grow: 1;
+            text-align: left;
+            padding: 0 20px;
+        }
+
+        .balance {
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .nav-buttons {
+            margin: 20px 0;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            color: #121212;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .loading {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #00ff88;
+        }
+
+        @keyframes shine {
+            0% { background-position: -100px; }
+            100% { background-position: 200px; }
+        }
+
+        .top-3 .leaderboard-item {
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 136, 0.2),
+                rgba(0, 255, 136, 0.4),
+                rgba(0, 255, 136, 0.2)
+            );
+            background-size: 200px 100%;
+            animation: shine 2s infinite linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Leaderboard</h1>
+        
+        <div class="nav-buttons">
+            <a href="index.html" class="button">Back to Game</a>
+            <button class="button" onclick="refreshLeaderboard()">Refresh</button>
+        </div>
+
+        <div class="leaderboard" id="leaderboardContainer">
+            <div class="loading">Loading leaderboard...</div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Firebase with your config
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_TsiHkiF3sbpojB3ZsiVwKeUb6qtcUWc",
+            authDomain: "slot-machines-36445.firebaseapp.com",
+            projectId: "slot-machines-36445",
+            storageBucket: "slot-machines-36445.firebasestorage.app",
+            messagingSenderId: "12445326097",
+            appId: "1:12445326097:web:bda94e8e7b9a3f40fbcab0",
+            measurementId: "G-1YZZS02KXV"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function loadLeaderboard() {
+            try {
+                const snapshot = await db.collection('users')
+                    .orderBy('balance', 'desc')
+                    .limit(100)
+                    .get();
+
+                const leaderboardContainer = document.getElementById('leaderboardContainer');
+                leaderboardContainer.innerHTML = '';
+
+                if (snapshot.empty) {
+                    leaderboardContainer.innerHTML = '<div class="loading">No entries yet</div>';
+                    return;
+                }
+
+                snapshot.docs.forEach((doc, index) => {
+                    const data = doc.data();
+                    const username = data.username || 'Anonymous';
+                    const balance = Number(data.balance || 0).toFixed(2);
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `leaderboard-item ${index < 3 ? 'top-3' : ''}`;
+                    itemDiv.innerHTML = `
+                        <div class="rank">#${index + 1}</div>
+                        <div class="username">${username}</div>
+                        <div class="balance">$${balance}</div>
+                    `;
+                    leaderboardContainer.appendChild(itemDiv);
+                });
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                document.getElementById('leaderboardContainer').innerHTML = 
+                    '<div class="loading">Error loading leaderboard</div>';
+            }
+        }
+
+        function refreshLeaderboard() {
+            document.getElementById('leaderboardContainer').innerHTML = 
+                '<div class="loading">Loading leaderboard...</div>';
+            loadLeaderboard();
+        }
+
+        // Load leaderboard on page load
+        loadLeaderboard();
+    </script>
+</body>
+</html>

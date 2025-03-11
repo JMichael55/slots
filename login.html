@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Slot Machine Game</title>
+    <!-- Update Firebase SDK to specific version -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #00ff88;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            color: #00ff88;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        h1 {
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #00ff88;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            color: #121212;
+        }
+
+        .google-btn {
+            background: #ffffff;
+            color: #121212;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #00ff88;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="back-button" onclick="window.location.href='index.html'">← Back to Game</div>
+        <h1>Welcome Back</h1>
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <button class="login-btn" onclick="emailLogin()">Login</button>
+        <div class="divider">OR</div>
+        <button class="google-btn" onclick="googleLogin()">
+            <img src="https://www.google.com/favicon.ico" alt="Google">
+            Continue with Google
+        </button>
+        <div id="errorMessage" class="error-message"></div>
+        <div class="register-link" onclick="toggleRegister()">
+            Don't have an account? Register here
+        </div>
+    </div>
+
+    <script>
+        // Initialize Firebase with your config
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_TsiHkiF3sbpojB3ZsiVwKeUb6qtcUWc",
+            authDomain: "slot-machines-36445.firebaseapp.com",
+            projectId: "slot-machines-36445",
+            storageBucket: "slot-machines-36445.firebasestorage.app",
+            messagingSenderId: "12445326097",
+            appId: "1:12445326097:web:bda94e8e7b9a3f40fbcab0",
+            measurementId: "G-1YZZS02KXV"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        let isRegistering = false;
+
+        function toggleRegister() {
+            isRegistering = !isRegistering;
+            const loginBtn = document.querySelector('.login-btn');
+            const registerLink = document.querySelector('.register-link');
+            const title = document.querySelector('h1');
+
+            if (isRegistering) {
+                loginBtn.textContent = 'Register';
+                registerLink.textContent = 'Already have an account? Login here';
+                title.textContent = 'Create Account';
+            } else {
+                loginBtn.textContent = 'Login';
+                registerLink.textContent = "Don't have an account? Register here";
+                title.textContent = 'Welcome Back';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        async function emailLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                if (isRegistering) {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                } else {
+                    await auth.signInWithEmailAndPassword(email, password);
+                }
+                window.location.href = 'index.html';
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function googleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                await auth.signInWithPopup(provider);
+                window.location.href = 'index.html';
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.querySelector('.login-container').innerHTML = `
+                    <h1>Welcome, ${user.email}</h1>
+                    <button class="login-btn" onclick="window.location.href='index.html'">Go to Game</button>
+                    <button class="google-btn" onclick="logout()">Logout</button>
+                `;
+            }
+        });
+
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.reload();
+            }).catch((error) => {
+                showError(error.message);
+            });
+        }
+    </script>
+</body>
+</html>
