@@ -1,0 +1,657 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 40px 20px;
+    background: #000;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.slots-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.slot-reel {
+    width: 120px;
+    height: 100px;
+    border: 3px solid #00ff88;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.slot-items {
+    position: absolute;
+    width: 100%;
+    transform: translateY(0);
+}
+
+.slot-item {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+@keyframes spin {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-800px); /* Increased for smoother animation over longer duration */
+    }
+}
+
+.slot-items {
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* Update transition timing for smoother stop */
+.slot-items {
+    position: absolute;
+    width: 100%;
+    transform: translateY(0);
+    transition: transform 0.8s cubic-bezier(0.1, 0.7, 0.5, 1); /* Smoother easing */
+}
+
+.rarity-emoji {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    font-size: 40px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.balance-container {
+    font-size: 24px;
+    margin: 20px 0;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+#spinButton {
+    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #121212;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+}
+
+#spinButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+}
+
+#spinButton:disabled {
+    background: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Animations */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes casinoBackground {
+    0% { background-color: #000; }
+    20% { background-color: #1a0022; }
+    40% { background-color: #220019; }
+    60% { background-color: #2a0011; }
+    80% { background-color: #1a0022; }
+    100% { background-color: #000; }
+}
+
+
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+}
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+}
+
+/* Header styles */
+h1 {
+    color: #00ff88;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    font-size: 3em;
+    margin-bottom: 30px;
+}
+
+/* Auth buttons container */
+.auth-buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* Auth button styles */
+.auth-button {
+    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+    color: #121212;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+}
+
+.auth-button.logout {
+    background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+    color: white;
+}
+
+/* Slots container */
+.slots-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+/* Slot reel styles */
+.slot-reel {
+    width: 120px;
+    height: 100px;
+    border: 3px solid #00ff88;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.slot-items {
+    position: absolute;
+    width: 100%;
+    transform: translateY(0);
+}
+
+.slot-item {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+@keyframes spin {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-800px); /* Increased for smoother animation over longer duration */
+    }
+}
+
+.slot-items {
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* Update transition timing for smoother stop */
+.slot-items {
+    position: absolute;
+    width: 100%;
+    transform: translateY(0);
+    transition: transform 0.8s cubic-bezier(0.1, 0.7, 0.5, 1); /* Smoother easing */
+}
+
+/* Balance container */
+.balance-container {
+    font-size: 28px;
+    margin: 20px 0;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    font-weight: bold;
+}
+
+/* Spin button */
+#spinButton {
+    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+    border: none;
+    padding: 15px 40px;
+    font-size: 20px;
+    color: #121212;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#spinButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.6);
+}
+
+#spinButton:disabled {
+    background: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Rarity emoji */
+.rarity-emoji {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    font-size: 40px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* Win message animation */
+.win-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 255, 136, 0.9);
+    color: #000;
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    animation: popIn 0.5s ease-out, fadeOut 0.5s ease-in 2.5s;
+    z-index: 1000;
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Animations */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shine {
+    0% { background-position: -100px; }
+    100% { background-position: 200px; }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .slots-container {
+        gap: 10px;
+    }
+
+    .slot-reel {
+        width: 90px;
+        height: 90px;
+    }
+
+    .slot-item {
+        height: 90px;
+        font-size: 35px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .balance-container {
+        font-size: 24px;
+    }
+
+    #spinButton {
+        padding: 12px 30px;
+        font-size: 18px;
+    }
+}
+
+/* User info styles */
+#userInfo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#userEmail {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+/* Fruit list container */
+#fruitList {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+}
+.inventory-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+.inventory-container h2 {
+    color: #00ff88;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.inventory-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.inventory-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.item-emoji {
+    font-size: 30px;
+    margin-right: 15px;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+}
+
+.item-name {
+    flex-grow: 1;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.item-count {
+    color: #00ff88;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.empty-inventory {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #00ff88;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.modal h3 {
+    color: #00ff88;
+    margin-bottom: 15px;
+}
+
+.sell-controls {
+    margin: 20px 0;
+}
+
+#sellAmount {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #00ff88;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-buttons button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    min-width: 120px;
+}
+
+.modal-buttons .sell-one {
+    background: #00ff88;
+    color: black;
+}
+
+.modal-buttons .sell-all {
+    background: #ff8800;
+    color: black;
+}
+
+.modal-buttons .cancel {
+    background: #ff4444;
+    color: white;
+}
+
+.modal-buttons button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+#sellItemInfo {
+    font-size: 1.2em;
+    margin: 20px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.upgrade-button {
+    background: linear-gradient(45deg, #ff8800, #ff5500);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.upgrade-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 136, 0, 0.4);
+}
+
+.upgrade-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.giant-joke-symbol {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: jokeAppear 0.5s ease-out;
+}
+
+.joke-content {
+    text-align: center;
+}
+
+.giant-emoji {
+    font-size: 200px;
+    animation: bounce 0.5s infinite alternate;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+}
+
+.joke-text {
+    font-size: 48px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0 white;
+    margin-top: 20px;
+    animation: shake 0.1s infinite;
+}
+
+@keyframes jokeAppear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes shake {
+    0% { transform: translateX(-1px); }
+    25% { transform: translateX(1px); }
+    50% { transform: translateX(-1px); }
+    75% { transform: translateX(1px); }
+    100% { transform: translateX(-1px); }
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Add floating animation for joke symbols in the slots */
+.slot-item .rarity-emoji[data-rarity="Clown"],
+.slot-item .rarity-emoji[data-rarity="Poop"] {
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translate(-50%, -50%) translateY(0px); }
+    50% { transform: translate(-50%, -50%) translateY(-5px); }
+    100% { transform: translate(-50%, -50%) translateY(0px); }
+}
